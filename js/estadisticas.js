@@ -11,27 +11,29 @@ let tbody = document.createElement("tbody");
 table.appendChild(tbody);
 
 let equipos = [];
-let media = [];
 
-for (let i = 0; i < matches.matches.length; i++) {
-    let x = {
-        Equipos: equipos[i],
-        Partidos: 0,
-        Goles:0,
-        Media: 0
+for (let i = 0; i < position.standings[0].table.length; i++) {
+  let x = {
+    club: position.standings[0].table[i].team.name,
+    partidos: 0,
+    goles: position.standings[0].table[i].goalsFor,
+    media: 0,
+  };
+  equipos.push(x);
+}
+
+for (i = 0; i < matches.matches.length; i++) {
+  for (j = 0; j < equipos.length; j++) {
+    if (
+      (equipos[j].club == matches.matches[i].homeTeam.name &&
+        matches.matches[i].score.winner != null) ||
+      (equipos[0].club == matches.matches[i].awayTeam.name &&
+        matches.matches[i].score.winner != null)
+    ) {
+      equipos[j].partidos++;
     }
-  if (equipos.includes(matches.matches[i].homeTeam.name) != true || equipos.includes(matches.matches[i].homeTeam.name) != true) {
-    equipos.push(matches.matches[i].homeTeam.name);
+    equipos[j].media = equipos[j].goles / equipos[j].partidos;
   }
 }
 
-for (i = 0; i < equipos.length; i++){
-    let x = {
-        Equipos: equipos[i],
-        Partidos: 0,
-        Goles:0,
-        Media: 0
-    }
-    media.push(x)
-};
-console.log(media)
+console.log(equipos);
