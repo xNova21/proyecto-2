@@ -1,6 +1,13 @@
 .escudo{
- width: 40px;
+ width: 2rem;
 }
 .logo{
     height: 50px;
 }
+.margin{
+    padding-left: 20vw;
+    padding-right: 20vw;
+    padding-top: 5vw;
+    padding-bottom: 5vw;
+}
+

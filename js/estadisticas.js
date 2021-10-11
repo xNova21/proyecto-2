@@ -1,6 +1,6 @@
 let estadisticas = document.getElementById("estadisticas");
 let table = document.createElement("table");
-table.setAttribute("class", "table");
+table.setAttribute("class", "table table-striped table-bordered");
 let thead = document.createElement("thead");
 let tr = document.createElement("tr");
 tr.innerHTML = `<td>Club</td><td>Goles</td><td>Partidos</td><td>Media de goles</td>`;

@@ -1,13 +1,14 @@
 let partidos = document.getElementById("partidos");
 let divFiltro = document.createElement("div");
 divFiltro.setAttribute("id", "filtro");
+divFiltro.setAttribute("class", "margin-auto")
 divFiltro.innerHTML = `<span>Equipo:</span> <input id="input"/> <input name = "x" type="radio" value="todos" id="todos"/>Todos <input type="radio" name = "x" id="ganados"/>Ganados <input type="radio" name = "x" value="perdidos" id="perdidos"/>Perdidos <input type="radio" name = "x" value= "empatados" id= "empatados"/>Empatados <button id="boton" >Buscar</button>`;
 partidos.appendChild(divFiltro);
 let tabla = document.createElement("table");
-tabla.setAttribute("class", "table")
+tabla.setAttribute("class", "table table-striped table-bordered")
 let thead = document.createElement("thead");
 let tr = document.createElement("tr");
-tr.innerHTML = `<td>Local</td><td>Resultado</td><td>Visitante</td>`;
+tr.innerHTML = `<th>Local</th><th>Resultado</th><th>Visitante</th>`;
 thead.appendChild(tr);
 tabla.appendChild(thead);
 partidos.appendChild(tabla);
