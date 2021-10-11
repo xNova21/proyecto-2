@@ -1,5 +1,6 @@
 let clasificacion = document.getElementById("clasificacion");
 let tabla = document.createElement("table");
+tabla.setAttribute("class", "table");
 let thead = document.createElement("thead");
 let tr = document.createElement("tr");
 let td = document.createElement("td");
