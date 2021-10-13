@@ -10,30 +10,66 @@ estadisticas.appendChild(table);
 let tbody = document.createElement("tbody");
 table.appendChild(tbody);
 
+function crearEquipos(){
 let equipos = [];
 
-for (let i = 0; i < position.standings[0].table.length; i++) {
-  let x = {
-    club: position.standings[0].table[i].team.name,
-    partidos: 0,
-    goles: position.standings[0].table[i].goalsFor,
-    media: 0,
-  };
-  equipos.push(x);
-}
 
-for (i = 0; i < matches.matches.length; i++) {
-  for (j = 0; j < equipos.length; j++) {
-    if (
-      (equipos[j].club == matches.matches[i].homeTeam.name &&
-        matches.matches[i].score.winner != null) ||
-      (equipos[0].club == matches.matches[i].awayTeam.name &&
-        matches.matches[i].score.winner != null)
-    ) {
-      equipos[j].partidos++;
-    }
-    equipos[j].media = equipos[j].goles / equipos[j].partidos;
+for(i=0 ; i<matches.matches.length; i++){
+    if(matches.matches[i].score.winner == null){
+    continue
   }
-}
+  let repetidoCasa = false
+  let repetidoVisitante = false
+  for(j=0; j<equipos.length; j++){
+    if(equipos[j].club == matches.matches[i].homeTeam.name){
+      repetidoCasa = true
+    }
+    if(equipos[j].club == matches.matches[i].awayTeam.name){
+      repetidoVisitante = true
+    }
+  }
+  if(repetidoCasa == false ){
+    let obj = { 
+      club: matches.matches[i].homeTeam.name,
+      partidos: 0,
+      goles: 0,
+      media: 0
+    }
+    equipos.push(obj)
+  }
+  if(repetidoVisitante == false ){
+    let obj = { 
+      club: matches.matches[i].awayTeam.name,
+      partidos: 0,
+      goles: 0,
+      media: 0
+    }
+    equipos.push(obj)
+  }
+  for(k=0; k<equipos.length; k++){
+    if(equipos[k].club == matches.matches[i].homeTeam.name){
+      equipos[k].partidos++;
+      equipos[k].goles+= matches.matches[i].score.fullTime.homeTeam
+    }
+    if(equipos[k].club == matches.matches[i].awayTeam.name){
+      equipos[k].partidos++;
+      equipos[k].goles+= matches.matches[i].score.fullTime.awayTeam
+    }
+    
 
-console.log(equipos);
+  }
+  } return equipos};
+  
+  let objEquipos = crearEquipos()
+  
+  for(let i = 0; i<objEquipos.length; i++){
+    objEquipos[i].media = parseFloat(objEquipos[i].goles/objEquipos[i].partidos).toFixed(2);
+    
+  }
+  objEquipos.sort((a,b) => b.media - a.media)
+  
+for(let i =0; i<5; i++){
+  let tr = document.createElement("tr")
+  tr.innerHTML = `<td>${objEquipos[i].club}</td><td>${objEquipos[i].goles}</td><td>${objEquipos[i].partidos}</td><td>${objEquipos[i].media}</td>`
+  tbody.appendChild(tr)
+}
