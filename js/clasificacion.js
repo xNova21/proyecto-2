@@ -109,6 +109,5 @@ async function init() {
   cargando.innerHTML = ""
   cabecera()
   pintarTabla(pClas);
-  console.log(pClas);
 }
 init();
