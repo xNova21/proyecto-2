@@ -1,4 +1,4 @@
-async function pedirDatos() {
+async function pedirPartidos() {
   let url =
     "https://api.football-data.org/v2/competitions/2014/matches?season=2021";
   let info = await fetch(url, {
@@ -16,13 +16,16 @@ async function pedirDatos() {
     .catch(function (error) {
       console.log(error);
     });
-    console.log(info)
+    return info
 }
-pedirDatos()
 
+let cargando = document.getElementById("loader")
+let img = document.createElement("img")
+img.setAttribute("src", "./images/miniatura.png")
+cargando.appendChild(img)
 
-// let partidos = document.getElementById("partidos");
-// partidos.setAttribute("class", "estadisticas")
+let partidos = document.getElementById("partidos");
+partidos.setAttribute("class", "estadisticas")
 let divFiltro = document.createElement("div");
 divFiltro.setAttribute("id", "filtro");
 divFiltro.setAttribute("class", "filtro");
@@ -43,114 +46,122 @@ error.setAttribute("id", "mensajeError");
 error.setAttribute("class", "centrar");
 partidos.appendChild(error);
 let mensajeError = document.getElementById("mensajeError");
-for (i = 0; i < data.matches.length; i++) {
-  if (matches.matches[i].score.winner == null) {
+
+
+function pintarPartidos(pPar){
+for (i = 0; i < pPar.length; i++) {
+  if (pPar[i].score.winner == null) {
     let tr = document.createElement("tr");
-    tr.innerHTML = `<td>${matches.matches[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].homeTeam.id}.svg"/>Pendiente<img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].awayTeam.id}.svg"/></td><td>${matches.matches[i].awayTeam.name}</td>`;
+    tr.innerHTML = `<td>${pPar[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${pPar[i].homeTeam.id}.svg"/>Pendiente<img class = "escudo" src="https://crests.football-data.org/${pPar[i].awayTeam.id}.svg"/></td><td>${pPar[i].awayTeam.name}</td>`;
     tbody.appendChild(tr);
   } else {
     let tr = document.createElement("tr");
-    tr.innerHTML = `<td>${matches.matches[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].homeTeam.id}.svg"/>${matches.matches[i].score.fullTime.homeTeam}-${matches.matches[i].score.fullTime.awayTeam}<img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].awayTeam.id}.svg"/></td><td>${matches.matches[i].awayTeam.name}</td>`;
+    tr.innerHTML = `<td>${pPar[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${pPar[i].homeTeam.id}.svg"/>${pPar[i].score.fullTime.homeTeam}-${pPar[i].score.fullTime.awayTeam}<img class = "escudo" src="https://crests.football-data.org/${pPar[i].awayTeam.id}.svg"/></td><td>${pPar[i].awayTeam.name}</td>`;
     tbody.appendChild(tr);
   }
-}
+}}
 let boton = document.getElementById("boton");
 
 let input = document.getElementById("input");
 
-boton.addEventListener("click", function () {
-  let equipo = false;
-  let x = document.getElementsByClassName("x");
-  tbody.innerHTML = "";
-  mensajeError.innerText = "";
-  let checked = false;
-  for (m = 0; m < x.length; m++) {
-    if (x[m].checked == true) {
-      checked = true;
-    }
-  }
 
-  for (i = 0; i < matches.matches.length; i++) {
-    if (
-      (document.getElementById("todos").checked &&
-        matches.matches[i].homeTeam.name == input.value) ||
-      (document.getElementById("todos").checked &&
-        matches.matches[i].awayTeam.name == input.value)
-    ) {
-      equipo = true;
-
-      if (matches.matches[i].score.winner == null) {
-        let tr = document.createElement("tr");
-        tr.innerHTML = `<td>${matches.matches[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].homeTeam.id}.svg"/>Pendiente<img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].awayTeam.id}.svg"/></td><td>${matches.matches[i].awayTeam.name}</td>`;
-        tbody.appendChild(tr);
-      } else {
-        let tr = document.createElement("tr");
-        tr.innerHTML = `<td>${matches.matches[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].homeTeam.id}.svg"/>${matches.matches[i].score.fullTime.homeTeam}-${matches.matches[i].score.fullTime.awayTeam}<img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].awayTeam.id}.svg"/></td><td>${matches.matches[i].awayTeam.name}</td>`;
-        tbody.appendChild(tr);
-      }
-    } else if (
-      (document.getElementById("ganados").checked &&
-        matches.matches[i].homeTeam.name == input.value) ||
-      (document.getElementById("ganados").checked &&
-        matches.matches[i].awayTeam.name == input.value)
-    ) {
-      equipo = true;
-
-      if (
-        (matches.matches[i].score.winner == "HOME_TEAM" &&
-          matches.matches[i].homeTeam.name == input.value) ||
-        (matches.matches[i].score.winner == "AWAY_TEAM" &&
-          matches.matches[i].awayTeam.name == input.value)
-      ) {
-        let tr = document.createElement("tr");
-        tr.innerHTML = `<td>${matches.matches[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].homeTeam.id}.svg"/>${matches.matches[i].score.fullTime.homeTeam}-${matches.matches[i].score.fullTime.awayTeam}<img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].awayTeam.id}.svg"/></td><td>${matches.matches[i].awayTeam.name}</td>`;
-        tbody.appendChild(tr);
-      }
-    } else if (
-      (document.getElementById("perdidos").checked &&
-        matches.matches[i].homeTeam.name == input.value) ||
-      (document.getElementById("perdidos").checked &&
-        matches.matches[i].awayTeam.name == input.value)
-    ) {
-      equipo = true;
-
-      if (
-        (matches.matches[i].score.winner == "AWAY_TEAM" &&
-          matches.matches[i].homeTeam.name == input.value) ||
-        (matches.matches[i].score.winner == "HOME_TEAM" &&
-          matches.matches[i].awayTeam.name == input.value)
-      ) {
-        let tr = document.createElement("tr");
-        tr.innerHTML = `<td>${matches.matches[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].homeTeam.id}.svg"/>${matches.matches[i].score.fullTime.homeTeam}-${matches.matches[i].score.fullTime.awayTeam}<img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].awayTeam.id}.svg"/></td><td>${matches.matches[i].awayTeam.name}</td>`;
-        tbody.appendChild(tr);
-      }
-    } else if (
-      (document.getElementById("empatados").checked &&
-        matches.matches[i].homeTeam.name == input.value) ||
-      (document.getElementById("empatados").checked &&
-        matches.matches[i].awayTeam.name == input.value)
-    ) {
-      equipo = true;
-
-      if (
-        (matches.matches[i].score.winner == "DRAW" &&
-          matches.matches[i].homeTeam.name == input.value) ||
-        (matches.matches[i].score.winner == "DRAW" &&
-          matches.matches[i].awayTeam.name == input.value)
-      ) {
-        let tr = document.createElement("tr");
-        tr.innerHTML = `<td>${matches.matches[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].homeTeam.id}.svg"/>${matches.matches[i].score.fullTime.homeTeam}-${matches.matches[i].score.fullTime.awayTeam}<img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].awayTeam.id}.svg"/></td><td>${matches.matches[i].awayTeam.name}</td>`;
-        tbody.appendChild(tr);
+async function init() {
+  let pPar = await pedirPartidos();
+  cargando.innerHTML = ""
+  pintarPartidos(pPar)
+  boton.addEventListener("click", function () {
+    let equipo = false;
+    let x = document.getElementsByClassName("x");
+    tbody.innerHTML = "";
+    mensajeError.innerText = "";
+    let checked = false;
+    for (m = 0; m < x.length; m++) {
+      if (x[m].checked == true) {
+        checked = true;
       }
     }
-  }
-  console.log(equipo);
-  console.log(input.value);
-  if (equipo == false && input.value != "") {
-    mensajeError.innerText = "Introduce un nombre válido";
-  } else if (checked == false) {
-    mensajeError.innerText = "Elige una categoría";
-  } else if (input.value == "") {
-    mensajeError.innerText = "Introduce el nombre de un equipo";
-  }
-});
+  
+    for (i = 0; i < pPar.length; i++) {
+      if (
+        (document.getElementById("todos").checked &&
+          pPar[i].homeTeam.name == input.value) ||
+        (document.getElementById("todos").checked &&
+          pPar[i].awayTeam.name == input.value)
+      ) {
+        equipo = true;
+  
+        if (pPar[i].score.winner == null) {
+          let tr = document.createElement("tr");
+          tr.innerHTML = `<td>${pPar[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${pPar[i].homeTeam.id}.svg"/>Pendiente<img class = "escudo" src="https://crests.football-data.org/${pPar[i].awayTeam.id}.svg"/></td><td>${pPar[i].awayTeam.name}</td>`;
+          tbody.appendChild(tr);
+        } else {
+          let tr = document.createElement("tr");
+          tr.innerHTML = `<td>${pPar[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${pPar[i].homeTeam.id}.svg"/>${pPar[i].score.fullTime.homeTeam}-${pPar[i].score.fullTime.awayTeam}<img class = "escudo" src="https://crests.football-data.org/${pPar[i].awayTeam.id}.svg"/></td><td>${pPar[i].awayTeam.name}</td>`;
+          tbody.appendChild(tr);
+        }
+      } else if (
+        (document.getElementById("ganados").checked &&
+          pPar[i].homeTeam.name == input.value) ||
+        (document.getElementById("ganados").checked &&
+          pPar[i].awayTeam.name == input.value)
+      ) {
+        equipo = true;
+  
+        if (
+          (pPar[i].score.winner == "HOME_TEAM" &&
+            pPar[i].homeTeam.name == input.value) ||
+          (pPar[i].score.winner == "AWAY_TEAM" &&
+            pPar[i].awayTeam.name == input.value)
+        ) {
+          let tr = document.createElement("tr");
+          tr.innerHTML = `<td>${pPar[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${pPar[i].homeTeam.id}.svg"/>${pPar[i].score.fullTime.homeTeam}-${pPar[i].score.fullTime.awayTeam}<img class = "escudo" src="https://crests.football-data.org/${pPar[i].awayTeam.id}.svg"/></td><td>${pPar[i].awayTeam.name}</td>`;
+          tbody.appendChild(tr);
+        }
+      } else if (
+        (document.getElementById("perdidos").checked &&
+          pPar[i].homeTeam.name == input.value) ||
+        (document.getElementById("perdidos").checked &&
+          pPar[i].awayTeam.name == input.value)
+      ) {
+        equipo = true;
+  
+        if (
+          (pPar[i].score.winner == "AWAY_TEAM" &&
+            pPar[i].homeTeam.name == input.value) ||
+          (pPar[i].score.winner == "HOME_TEAM" &&
+            pPar[i].awayTeam.name == input.value)
+        ) {
+          let tr = document.createElement("tr");
+          tr.innerHTML = `<td>${pPar[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${pPar[i].homeTeam.id}.svg"/>${pPar[i].score.fullTime.homeTeam}-${pPar[i].score.fullTime.awayTeam}<img class = "escudo" src="https://crests.football-data.org/${pPar[i].awayTeam.id}.svg"/></td><td>${pPar[i].awayTeam.name}</td>`;
+          tbody.appendChild(tr);
+        }
+      } else if (
+        (document.getElementById("empatados").checked &&
+          pPar[i].homeTeam.name == input.value) ||
+        (document.getElementById("empatados").checked &&
+          pPar[i].awayTeam.name == input.value)
+      ) {
+        equipo = true;
+  
+        if (
+          (pPar[i].score.winner == "DRAW" &&
+            pPar[i].homeTeam.name == input.value) ||
+          (pPar[i].score.winner == "DRAW" &&
+            pPar[i].awayTeam.name == input.value)
+        ) {
+          let tr = document.createElement("tr");
+          tr.innerHTML = `<td>${pPar[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${pPar[i].homeTeam.id}.svg"/>${pPar[i].score.fullTime.homeTeam}-${pPar[i].score.fullTime.awayTeam}<img class = "escudo" src="https://crests.football-data.org/${pPar[i].awayTeam.id}.svg"/></td><td>${pPar[i].awayTeam.name}</td>`;
+          tbody.appendChild(tr);
+        }
+      }
+    }
+    if (equipo == false && input.value != "") {
+      mensajeError.innerText = "Introduce un nombre válido";
+    } else if (checked == false) {
+      mensajeError.innerText = "Elige una categoría";
+    } else if (input.value == "") {
+      mensajeError.innerText = "Introduce el nombre de un equipo";
+    }
+  });
+}
+init();

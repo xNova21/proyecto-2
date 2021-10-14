@@ -17,7 +17,12 @@ async function perdirClasificacion() {
     });
   return info;
 }
+let cargando = document.getElementById("loader")
+let img = document.createElement("img")
+img.setAttribute("src", "./images/miniatura.png")
+cargando.appendChild(img)
 
+function cabecera(){
 let clasificacion = document.getElementById("clasificacion");
 let tabla = document.createElement("table");
 tabla.setAttribute("class", "table table-striped table-bordered ");
@@ -57,9 +62,11 @@ thead.appendChild(tr);
 tabla.appendChild(thead);
 clasificacion.appendChild(tabla);
 let tbody = document.createElement("tbody");
-tabla.appendChild(tbody);
+tbody.setAttribute("id", "tbody")
+tabla.appendChild(tbody);}
 
 function pintarTabla(pClas) {
+  let tbody = document.getElementById("tbody")
   for (i = 0; i < pClas.length; i++) {
     let tr = document.createElement("tr");
     let td = document.createElement("td");
@@ -96,8 +103,11 @@ function pintarTabla(pClas) {
     tbody.appendChild(tr);
   }
 }
+
 async function init() {
   let pClas = await perdirClasificacion();
+  cargando.innerHTML = ""
+  cabecera()
   pintarTabla(pClas);
   console.log(pClas);
 }
