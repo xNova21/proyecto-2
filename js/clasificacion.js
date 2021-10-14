@@ -1,4 +1,4 @@
-async function perdirClasificacion(){
+async function perdirClasificacion() {
   let url = "https://api.football-data.org/v2/competitions/2014/standings";
   let info = await fetch(url, {
     method: "GET",
@@ -6,20 +6,16 @@ async function perdirClasificacion(){
       "X-Auth-Token": "41cb86530b6a4d458ec35bd404384089",
     },
   })
-  .then(function (response) {
-    return response.json();
-  })
-  .then(function (data) {
-    return data.standings[0].table;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      return data.standings[0].table;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   return info;
-}
-async function init(){
-  let pClas = await perdirClasificacion()
-  console.log(pClas)
 }
 
 let clasificacion = document.getElementById("clasificacion");
@@ -63,39 +59,46 @@ clasificacion.appendChild(tabla);
 let tbody = document.createElement("tbody");
 tabla.appendChild(tbody);
 
-for (i = 0; i < position.standings[0].table.length; i++) {
-  let tr = document.createElement("tr");
-  let td = document.createElement("td");
-  td.innerText = position.standings[0].table[i].position;
-  tr.appendChild(td);
-  td = document.createElement("td");
-  td.innerHTML = `<img class = "escudo" src="https://crests.football-data.org/${position.standings[0].table[i].team.id}.svg"/>
-   ${position.standings[0].table[i].team.name}`;
-  tr.appendChild(td);
-  td = document.createElement("td");
-  td.innerText = position.standings[0].table[i].playedGames;
-  tr.appendChild(td);
-  td = document.createElement("td");
-  td.innerText = position.standings[0].table[i].won;
-  tr.appendChild(td);
-  td = document.createElement("td");
-  td.innerText = position.standings[0].table[i].lost;
-  tr.appendChild(td);
-  td = document.createElement("td");
-  td.innerText = position.standings[0].table[i].draw;
-  tr.appendChild(td);
-  td = document.createElement("td");
-  td.innerText = position.standings[0].table[i].goalsFor;
-  tr.appendChild(td);
-  td = document.createElement("td");
-  td.innerText = position.standings[0].table[i].goalsAgainst;
-  tr.appendChild(td);
-  td = document.createElement("td");
-  td.innerText = position.standings[0].table[i].goalDifference;
-  tr.appendChild(td);
-  td = document.createElement("td");
-  td.innerText = position.standings[0].table[i].points;
-  tr.appendChild(td);
-  tbody.appendChild(tr);
+function pintarTabla(pClas) {
+  for (i = 0; i < pClas.length; i++) {
+    let tr = document.createElement("tr");
+    let td = document.createElement("td");
+    td.innerText = pClas[i].position;
+    tr.appendChild(td);
+    td = document.createElement("td");
+    td.innerHTML = `<img class = "escudo" src="https://crests.football-data.org/${pClas[i].team.id}.svg"/>
+   ${pClas[i].team.name}`;
+    tr.appendChild(td);
+    td = document.createElement("td");
+    td.innerText = pClas[i].playedGames;
+    tr.appendChild(td);
+    td = document.createElement("td");
+    td.innerText = pClas[i].won;
+    tr.appendChild(td);
+    td = document.createElement("td");
+    td.innerText = pClas[i].lost;
+    tr.appendChild(td);
+    td = document.createElement("td");
+    td.innerText = pClas[i].draw;
+    tr.appendChild(td);
+    td = document.createElement("td");
+    td.innerText = pClas[i].goalsFor;
+    tr.appendChild(td);
+    td = document.createElement("td");
+    td.innerText = pClas[i].goalsAgainst;
+    tr.appendChild(td);
+    td = document.createElement("td");
+    td.innerText = pClas[i].goalDifference;
+    tr.appendChild(td);
+    td = document.createElement("td");
+    td.innerText = pClas[i].points;
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+  }
 }
-init()
+async function init() {
+  let pClas = await perdirClasificacion();
+  pintarTabla(pClas);
+  console.log(pClas);
+}
+init();
