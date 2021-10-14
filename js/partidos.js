@@ -1,4 +1,28 @@
-let partidos = document.getElementById("partidos");
+async function pedirDatos() {
+  let url =
+    "https://api.football-data.org/v2/competitions/2014/matches?season=2021";
+  let info = await fetch(url, {
+    method: "GET",
+    headers: {
+      "X-Auth-Token": "41cb86530b6a4d458ec35bd404384089",
+    },
+  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      return data.matches;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    console.log(info)
+}
+pedirDatos()
+
+
+// let partidos = document.getElementById("partidos");
+// partidos.setAttribute("class", "estadisticas")
 let divFiltro = document.createElement("div");
 divFiltro.setAttribute("id", "filtro");
 divFiltro.setAttribute("class", "filtro");
@@ -16,9 +40,10 @@ let tbody = document.createElement("tbody");
 tabla.appendChild(tbody);
 let error = document.createElement("span");
 error.setAttribute("id", "mensajeError");
+error.setAttribute("class", "centrar");
 partidos.appendChild(error);
 let mensajeError = document.getElementById("mensajeError");
-for (i = 0; i < matches.matches.length; i++) {
+for (i = 0; i < data.matches.length; i++) {
   if (matches.matches[i].score.winner == null) {
     let tr = document.createElement("tr");
     tr.innerHTML = `<td>${matches.matches[i].homeTeam.name}</td><td><img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].homeTeam.id}.svg"/>Pendiente<img class = "escudo" src="https://crests.football-data.org/${matches.matches[i].awayTeam.id}.svg"/></td><td>${matches.matches[i].awayTeam.name}</td>`;
@@ -34,7 +59,7 @@ let boton = document.getElementById("boton");
 let input = document.getElementById("input");
 
 boton.addEventListener("click", function () {
-  let equipo = false
+  let equipo = false;
   let x = document.getElementsByClassName("x");
   tbody.innerHTML = "";
   mensajeError.innerText = "";
@@ -44,10 +69,9 @@ boton.addEventListener("click", function () {
       checked = true;
     }
   }
- 
-  
+
   for (i = 0; i < matches.matches.length; i++) {
-      if (
+    if (
       (document.getElementById("todos").checked &&
         matches.matches[i].homeTeam.name == input.value) ||
       (document.getElementById("todos").checked &&
@@ -119,19 +143,14 @@ boton.addEventListener("click", function () {
         tbody.appendChild(tr);
       }
     }
-    
-  
   }
-  console.log(equipo)
-  console.log(input.value)
+  console.log(equipo);
+  console.log(input.value);
   if (equipo == false && input.value != "") {
     mensajeError.innerText = "Introduce un nombre válido";
-  }
-  else if (checked == false ) {
+  } else if (checked == false) {
     mensajeError.innerText = "Elige una categoría";
-  }
-  
-  else if (input.value == "") {
+  } else if (input.value == "") {
     mensajeError.innerText = "Introduce el nombre de un equipo";
   }
 });

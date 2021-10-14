@@ -1,3 +1,27 @@
+async function perdirClasificacion(){
+  let url = "https://api.football-data.org/v2/competitions/2014/standings";
+  let info = await fetch(url, {
+    method: "GET",
+    headers: {
+      "X-Auth-Token": "41cb86530b6a4d458ec35bd404384089",
+    },
+  })
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (data) {
+    return data.standings[0].table;
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+  return info;
+}
+async function init(){
+  let pClas = await perdirClasificacion()
+  console.log(pClas)
+}
+
 let clasificacion = document.getElementById("clasificacion");
 let tabla = document.createElement("table");
 tabla.setAttribute("class", "table table-striped table-bordered ");
@@ -74,3 +98,4 @@ for (i = 0; i < position.standings[0].table.length; i++) {
   tr.appendChild(td);
   tbody.appendChild(tr);
 }
+init()

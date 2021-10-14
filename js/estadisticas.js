@@ -1,4 +1,5 @@
 let estadisticas = document.getElementById("estadisticas");
+estadisticas.setAttribute("class", "estadisticas")
 let table = document.createElement("table");
 table.setAttribute("class", "table table-striped table-bordered");
 let thead = document.createElement("thead");
@@ -12,6 +13,7 @@ table.appendChild(tbody);
 
 function crearEquipos(){
 let equipos = [];
+
 
 
 for(i=0 ; i<matches.matches.length; i++){
@@ -33,7 +35,8 @@ for(i=0 ; i<matches.matches.length; i++){
       club: matches.matches[i].homeTeam.name,
       partidos: 0,
       goles: 0,
-      media: 0
+      media: 0,
+      id: matches.matches[i].awayTeam.id
     }
     equipos.push(obj)
   }
@@ -42,7 +45,8 @@ for(i=0 ; i<matches.matches.length; i++){
       club: matches.matches[i].awayTeam.name,
       partidos: 0,
       goles: 0,
-      media: 0
+      media: 0,
+      id: matches.matches[i].awayTeam.id
     }
     equipos.push(obj)
   }
@@ -67,9 +71,10 @@ for(i=0 ; i<matches.matches.length; i++){
     
   }
   objEquipos.sort((a,b) => b.media - a.media)
+ 
   
 for(let i =0; i<5; i++){
   let tr = document.createElement("tr")
-  tr.innerHTML = `<td>${objEquipos[i].club}</td><td>${objEquipos[i].goles}</td><td>${objEquipos[i].partidos}</td><td>${objEquipos[i].media}</td>`
+  tr.innerHTML = `<td><img class = "escudo" src="https://crests.football-data.org/${objEquipos[i].id}.svg"/>${objEquipos[i].club}</td><td>${objEquipos[i].goles}</td><td>${objEquipos[i].partidos}</td><td>${objEquipos[i].media}</td>`
   tbody.appendChild(tr)
 }
