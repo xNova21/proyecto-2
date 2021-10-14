@@ -63,7 +63,7 @@ for (i = 0; i < pPar.length; i++) {
 let boton = document.getElementById("boton");
 
 let input = document.getElementById("input");
-
+let nombreEquipo = []
 
 async function init() {
   let pPar = await pedirPartidos();
@@ -82,11 +82,18 @@ async function init() {
     }
   
     for (i = 0; i < pPar.length; i++) {
+      
+      if(nombreEquipo.includes(pPar[i].homeTeam) == false){
+        nombreEquipo.push(pPar[i].homeTeam)
+      }
+      if(pPar[i].homeTeam.name == input.value || pPar[i].awayTeam.name == input.value){
+        equipo = true
+      }
       if (
         (document.getElementById("todos").checked &&
           pPar[i].homeTeam.name == input.value) ||
         (document.getElementById("todos").checked &&
-          pPar[i].awayTeam.name == input.value)
+          pPar[i].awayTeam.name == input.value) 
       ) {
         equipo = true;
   
@@ -154,14 +161,17 @@ async function init() {
           tbody.appendChild(tr);
         }
       }
+      if (equipo == false && input.value != "") {
+        mensajeError.innerText = "Introduce un nombre válido";}
+       else if (checked == false && input.value != "") {
+        mensajeError.innerText = "Elige una categoría para filtrar";
+      } else if (input.value == "") {
+        mensajeError.innerText = "Introduce el nombre de un equipo";
+      }
     }
-    if (equipo == false && input.value != "") {
-      mensajeError.innerText = "Introduce un nombre válido";
-    } else if (checked == false) {
-      mensajeError.innerText = "Elige una categoría";
-    } else if (input.value == "") {
-      mensajeError.innerText = "Introduce el nombre de un equipo";
-    }
+    console.log(equipo)
+    
   });
+
 }
 init();
