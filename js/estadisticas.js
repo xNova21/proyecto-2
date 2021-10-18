@@ -57,7 +57,7 @@ for(i=0 ; i<pPar.length; i++){
       partidos: 0,
       goles: 0,
       media: 0,
-      id: pPar[i].awayTeam.id
+      id: pPar[i].homeTeam.id
     }
     equipos.push(obj)
   }
